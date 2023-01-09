@@ -19,7 +19,28 @@
         
         <link rel="stylesheet" href="/css/fonts.min.css">
         <link rel="stylesheet" href="/css/particlex.css">
+
+
+        <!-- 《页面点击小红心 -->
+        
+         <!-- 页面点击小红心》 -->
+
+         <!--鼠标点击烟花爆炸效果，需要引入jQuery-->
+        
+            <canvas class="fireworks" style="position: fixed;left: 0;top: 0;z-index: 1; pointer-events: none;" ></canvas> 
+            <script type="text/javascript" src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script> 
+            <script type="text/javascript" src="/js/fireworks.js"></script>
+        
+        <!--彩带1.点击自动替换彩带-->
+        
+            <!-- <script src="https://g.joyinshare.com/hc/ribbon.min.js" type="text/javascript"></script> -->
+            <script type="text/javascript" src="/js/ribbon.js"></script>
+        
+
+
+
     <meta name="generator" content="Hexo 6.3.0"></head>
+
     <body>
         <div id="loading" style="height: 100vh; width: 100vw; position: fixed; display: flex; z-index: 2147483647; justify-content: space-between; background: #fff; transition: all 0.3s ease-out; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none">
     <div style="position: fixed; height: 100vh; width: 100vw; display: flex; justify-content: center; align-items: center">
@@ -50,6 +71,11 @@
             <span>&ensp;home</span>
         </a>
         
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;about</span>
+        </a>
+        
         <a href="/archives">
             <i class="fa-solid fa-box-archive fa-fw"></i>
             <span>&ensp;archives</span>
@@ -71,6 +97,15 @@
                         <i class="fa-solid fa-house fa-fw"></i>
                     </div>
                     <div style="min-width: 100px; max-width: 150%; width: 20%">home</div>
+                </div>
+            </a>
+            
+            <a href="/about">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-id-card fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">about</div>
                 </div>
             </a>
             
@@ -183,5 +218,5 @@
     
 
 
-    </body>
+    <script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/assets/koharu.model.json"},"display":{"position":"left","width":150,"height":300,"hOffset":40,"vOffset":-15},"mobile":{"show":true},"react":{"opacity":0.7},"log":false});</script></body>
 </html>
