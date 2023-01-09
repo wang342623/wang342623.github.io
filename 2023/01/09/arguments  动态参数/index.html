@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
-        <title>轻语 の ブログ</title>
+        <title>Arguments 动态参数 | 轻语 の ブログ</title>
         <meta name="author" content="轻语">
         <meta name="description" content="">
         <meta name="keywords" content="">
@@ -90,162 +90,65 @@
 
                     </div>
                     <div id="main">
-                        <div id="home-background" style="background-image: url(/img/home1.jpg)"></div>
-<div id="home-head">
-    
-    <div id="home-info" class="home-info" @click="homeclick">
-        <span class="loop"></span>
-        <span class="loop"></span>
-        <span class="loop"></span>
-        <span class="loop"></span>
-        <span class="info">
-            <div class="wrap">
-                <h1>轻语 の ブログ</h1>
-                <h3></h3>
-                <h5></h5>
-            </div>
-        </span>
+                        <div class="article">
+    <div>
+        <h1>Arguments 动态参数 </h1>
     </div>
-    
-</div>
-<div id="home-posts-wrap" class="">
-    <div id="home-posts">
-        <div id="posts">
-            
-
-<div class="post">
-    <a href="/2023/01/09/%E6%B7%B1%E6%B5%85%E6%8B%B7%E8%B4%9D/">
-        <h2 class="post-title">深浅拷贝</h2>
-    </a>
-    <div class="category-and-date">
-        
+    <div class="info">
         <span class="date">
             <span class="icon">
                 <i class="fa-solid fa-calendar fa-fw"></i>
             </span>
             2023/1/9
         </span>
-    </div>
-    <div class="excerpt">
-        <div class="content" v-pre>
-            
-            
-            
-        </div>
-    </div>
-    <div class="post-tags">
         
         
-    </div>
-    <a href="/2023/01/09/%E6%B7%B1%E6%B5%85%E6%8B%B7%E8%B4%9D/" class="go-post">阅读全文</a>
-</div>
-
-<div class="post">
-    <a href="/2023/01/09/arguments%20%20%E5%8A%A8%E6%80%81%E5%8F%82%E6%95%B0/">
-        <h2 class="post-title">Arguments 动态参数</h2>
-    </a>
-    <div class="category-and-date">
-        
-        <span class="date">
-            <span class="icon">
-                <i class="fa-solid fa-calendar fa-fw"></i>
-            </span>
-            2023/1/9
-        </span>
-    </div>
-    <div class="excerpt">
-        <div class="content" v-pre>
-            
-            
-            
-        </div>
-    </div>
-    <div class="post-tags">
-        
-        
-    </div>
-    <a href="/2023/01/09/arguments%20%20%E5%8A%A8%E6%80%81%E5%8F%82%E6%95%B0/" class="go-post">阅读全文</a>
-</div>
-
-<div class="post">
-    <a href="/2023/01/07/hello-world/">
-        <h2 class="post-title">Hello World</h2>
-    </a>
-    <div class="category-and-date">
-        
-        <span class="date">
-            <span class="icon">
-                <i class="fa-solid fa-calendar fa-fw"></i>
-            </span>
-            2023/1/7
-        </span>
-    </div>
-    <div class="excerpt">
-        <div class="content" v-pre>
-            
-            
-            
-        </div>
-    </div>
-    <div class="post-tags">
-        
-        
-    </div>
-    <a href="/2023/01/07/hello-world/" class="go-post">阅读全文</a>
-</div>
-
-
-            <div class="page-current">
-    <div class="prev">
-        
-    </div>
-    <div class="page-index">
-        
-        <span class="current">
-            1
-        </span>
-        
-    </div>
-    <div class="next">
-        
-    </div>
-</div>
-
-        </div>
     </div>
     
-    <div id="home-card">
-        <div id="card-div">
-    <div class="card-style" style="width: 300px">
-        <div class="avatar">
-            <img src="/img/head.jpg" alt="avatar">
-        </div>
-        <div class="name">
-            轻语
-        </div>
-        <div class="descriptions">
-            
-            <div class="description">
-                <p>JavaScript</p>
+    <div class="content" v-pre>
+        <p>1、在函数调用的时候，浏览器每次都会传递进两个隐式参数：<br />一个是函数的上下文对象this，另一个则是封装实参的类数组对象arguments。</p>
+<p>与其他程序设计语言不同，ECMAScript不会验证传递给函数的参数个数是否等于函数定义的参数个数。开发者定义的函数都可以接受任意个数的参数（但根据Netscape的文档，最多可接受255个），而不会引发任何错误。任何遗漏的参数都会以undefined传递给函数，多余的函数将忽略。</p>
+<p>arguments 是函数内部内置的伪数组变量，它包含了调用函数时传入的所有实参。</p>
+<pre><code>&lt;script&gt;
+  // 求生函数，计算所有参数的和
+  function sum() &#123;
+    // console.log(arguments)
+    let s = 0
+    for(let i = 0; i &lt; arguments.length; i++) &#123;
+      s += arguments[i]
+    &#125;
+    console.log(s)
+  &#125;
+  // 调用求和函数
+  sum(5, 10)// 两个参数
+  sum(1, 2, 4) // 两个参数
+&lt;/script&gt;
+</code></pre>
+<p>总结：</p>
+<ol>
+<li>arguments 是一个伪数组</li>
+<li>arguments 的作用是动态获取函数的实参<br><a name="UP8UJ"></a></li>
+</ol>
+<h5 id="剩余参数-rest"><a href="#剩余参数-rest" class="headerlink" title="剩余参数 rest"></a>剩余参数 rest</h5><pre><code>&lt;script&gt;
+  function config(baseURL, ...other) &#123;
+    console.log(baseURL) // 得到 &#39;http://baidu.com&#39;
+    console.log(other)  // other  得到 [&#39;get&#39;, &#39;json&#39;]
+  &#125;
+  // 调用函数
+  config(&#39;http://baidu.com&#39;, &#39;get&#39;, &#39;json&#39;);
+&lt;/script&gt;
+</code></pre>
+<p>总结：</p>
+<ol>
+<li>… 是语法符号，置于最末函数形参之前，用于获取多余的实参</li>
+<li>借助 … 获取的剩余实参，是个真数组</li>
+</ol>
 
-            </div>
-            
-            <div class="description">
-                <p>Vue</p>
-
-            </div>
-            
-        </div>
-        <div class="icon-links">
-            
-        </div>
-        <div class="friend-links">
-            
-        </div>
     </div>
-</div>
-
-    </div>
+    
+    
+    
+    
     
 </div>
 
@@ -273,6 +176,11 @@
         </div>
         <script src="/js/functions.js"></script>
 <script src="/js/particlex.js"></script>
+
+    
+    
+    
+    
 
 
     </body>
