@@ -1,7 +1,7 @@
 {
-  "name": "live2d-widget-model-koharu",
+  "name": "live2d-widget-model-z16",
   "version": "1.0.5",
-  "description": "koharu live2d model for live2d-widget.js",
+  "description": "z16 live2d model for live2d-widget.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

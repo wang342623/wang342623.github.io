@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
-        <title>Archives | 轻语 の ブログ</title>
+        <title>原型和原型链 | 轻语 の ブログ</title>
         <meta name="author" content="轻语">
         <meta name="description" content="轻语的博客之家">
         <meta name="keywords" content="轻语 博客 轻语博客 轻语のブログ">
@@ -124,64 +124,118 @@
 
                     </div>
                     <div id="main">
-                        <div id="archives">
-    
-    
-    <div class="timeline" path="/2023/02/15/%E5%8E%9F%E5%9E%8B%E5%92%8C%E5%8E%9F%E5%9E%8B%E9%93%BE/" style="z-index: 4">
-        <div class="timeline-tail"></div>
-        <div class="timeline-content">
-            <div class="item-time">2023/2/15</div>
-            <a href="/2023/02/15/%E5%8E%9F%E5%9E%8B%E5%92%8C%E5%8E%9F%E5%9E%8B%E9%93%BE/">
-                <h3>原型和原型链</h3>
-            </a>
-            <div class="info">
-                
-                
-            </div>
-        </div>
+                        <div class="article">
+    <div>
+        <h1>原型和原型链 </h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2023/2/15
+        </span>
+        
+        
     </div>
     
-    <div class="timeline" path="/2023/01/09/coopy/" style="z-index: 3">
-        <div class="timeline-tail"></div>
-        <div class="timeline-content">
-            <div class="item-time">2023/1/9</div>
-            <a href="/2023/01/09/coopy/">
-                <h3>深浅拷贝</h3>
-            </a>
-            <div class="info">
-                
-                
-            </div>
-        </div>
+    <div class="content" v-pre>
+        <p><a name="bOxoM"></a></p>
+<h3 id="原型的五条规则"><a href="#原型的五条规则" class="headerlink" title="原型的五条规则"></a><strong>原型的五条规则</strong></h3><ol>
+<li>所有的引用数据类型都具有对象的特性，可以自由的扩展属性</li>
+<li>所有的对象都有 <strong>proto</strong> 属性, 它的值是一个对象 <strong>proto</strong> 也叫隐式原型</li>
+<li>所有的函数都有 prototype 属性, 它的值也是一个对象 prototype 也叫显式原型</li>
+<li>引用类型中 <strong>proto</strong> 指向他构造函数的 prototype 也就是对象的隐式原型指向它构造函数的显式原型</li>
+<li>当我们获取对象身上不存在的属性时,那么他就会去 <strong>proto</strong> 中获取</li>
+</ol>
+<blockquote>
+<p>引用数据类型 ： Object 、Array 、Function 、Date 、RegExp</p>
+</blockquote>
+<blockquote>
+<p>使用原型有哪些优点&#x2F;好处？</p>
+</blockquote>
+<p>我们有一个构造函数，使用这个构造函数实例的对象都有一个 jump() 方法 </p>
+<pre><code class="javascript">function Person (name,age)&#123;
+    this.name = name
+    this.age = age
+      jump()&#123;
+     console.log(&#39;jump&#39;)   
+      &#125;
+ &#125;
+const per1 = new Person(&#39;小明&#39;,12)
+const per2 = new Person(&#39;小红&#39;,13)
+per1.jump()
+per2.jump()
+</code></pre>
+<p>上面代码中 jump方法 在堆中存储效果是这样的<br /><img src="https://cdn.nlark.com/yuque/0/2023/jpeg/26516221/1676463947565-9b4f655e-c175-4c00-b3cf-8a5be9ee1977.jpeg"><br />入上图所示会在堆内存中开辟两块空间存放同一个函数<br />那么我们怎么解决这个问题呢? 原型?</p>
+<pre><code class="javascript">function Person (name,age)&#123;
+    this.name = name
+    this.age = age
+ &#125;
+const jump = function ()&#123;
+     console.log(&#39;jump&#39;)   
+&#125;
+// 将jump 方法绑定在 People构造函数的显式原型上
+Person.prototype.jump = jump
+
+const per1 = new Person(&#39;小明&#39;,12)
+const per2 = new Person(&#39;小红&#39;,13)
+per1.jump()
+per2.jump()
+</code></pre>
+<p>我们将公共的方法绑定在构造函数的prototype上 根据上面的第四条规则</p>
+<blockquote>
+<p>引用类型中 <strong>proto</strong> 指向他构造函数的 prototype 也就是对象的隐式原型指向它构造函数的显式原型</p>
+</blockquote>
+<p>当我们访问实例对象身上不存在的方法时则会通过 <strong>proto</strong>  访问到构造函数的 prototype 上<br /><img src="https://cdn.nlark.com/yuque/0/2023/jpeg/26516221/1676463892748-9516102e-45f3-4701-a6a2-5209aa7a1839.jpeg"><br><a name="mzXOd"></a></p>
+<h3 id="什么又是原型链呢"><a href="#什么又是原型链呢" class="headerlink" title="什么又是原型链呢?"></a>什么又是原型链呢?</h3><p>看下面这段代码：</p>
+<pre><code class="javascript">function Person(name) &#123;
+  this.name = name
+&#125;
+
+var nick = new Person(&quot;nick&quot;)
+nick.toString
+// ƒ toString() &#123; [native code] &#125;
+</code></pre>
+<p>按照道理来说 nick 是 Person构造函数的实例 并且 Person的构造函数上也没有 toString方法 , 那么为什么 nick 可以获取到 toString 方法呢?</p>
+<blockquote>
+<p>这就是原型链  nick 先从自身出发 发现自身并没有 toString 方法 然后 向上找, 找到了构造函数 prototype ,发现也没有该方法 , 然后构造函数 的 prototype 本质也是一个对象 就会接着通过 <strong>proto</strong> 向上找 找到了 Object.prototype , 所以就找到了 Object.prototype 下的 toString 方法。</p>
+</blockquote>
+<p><img src="https://cdn.nlark.com/yuque/0/2022/jpeg/26516221/1671881898000-da3c788f-311f-4229-a885-5403b7554202.jpeg"></p>
+<blockquote>
+<p>最上级的null 是为了避免死循环 Object.prototype 的隐式原型指向 null。</p>
+</blockquote>
+<p><a name="bMc12"></a></p>
+<h3 id="instanceof-是什么-是否可以手写实现-instanceof"><a href="#instanceof-是什么-是否可以手写实现-instanceof" class="headerlink" title="instanceof 是什么? 是否可以手写实现 instanceof?"></a>instanceof 是什么? 是否可以手写实现 instanceof?</h3><p>instanceof 是检查构造函数的显式原型是否出现在 目标对象的原型链中任意位置</p>
+<pre><code class="javascript">// 检测 R的原型是否出现在L的原型链中
+function instance_of(L,R)&#123;
+    //先验证 R 的数据类型
+  const typeArr = [&#39;number&#39;,&#39;string&#39;,&#39;null&#39;,&#39;undefined&#39;,&#39;boolean&#39;,&#39;symbol&#39;]
+  if(typeArr.includes(typeof R)) return
+  // 获取 R 的显式原型 
+    const RPT = R.prototype
+  // 获取 L 的隐式原型
+  const LP = L.__proto__
+  while(true)&#123;
+    if(RPT === LP)&#123; // 相等返回
+        return true
+    &#125;
+    // 找到了最底层
+    if(LP === null)&#123;
+      return false
+    &#125;
+    // 没有找到则向上一层继续
+    LP = LP.__proto__
+  &#125;
+&#125;
+</code></pre>
+<p> 实现思路 :<br />如果 构造函数的显式原型 在 对象的原型链中 那么 两者是相等的 <br />如果两者不相等 则向上寻找继续比较 直到null</p>
+
     </div>
     
-    <div class="timeline" path="/2023/01/09/arguments/" style="z-index: 2">
-        <div class="timeline-tail"></div>
-        <div class="timeline-content">
-            <div class="item-time">2023/1/9</div>
-            <a href="/2023/01/09/arguments/">
-                <h3>Arguments 动态参数</h3>
-            </a>
-            <div class="info">
-                
-                
-            </div>
-        </div>
-    </div>
     
-    <div class="timeline" path="/2023/01/07/hello-world/" style="z-index: 1">
-        <div class="timeline-tail"></div>
-        <div class="timeline-content">
-            <div class="item-time">2023/1/7</div>
-            <a href="/2023/01/07/hello-world/">
-                <h3>我的第一篇博客</h3>
-            </a>
-            <div class="info">
-                
-                
-            </div>
-        </div>
-    </div>
+    
+    
     
 </div>
 
@@ -209,6 +263,11 @@
         </div>
         <script src="/js/functions.js"></script>
 <script src="/js/particlex.js"></script>
+
+    
+    
+    
+    
 
 
     <script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/assets/z16.model.json"},"display":{"position":"left","width":150,"height":300,"hOffset":40,"vOffset":-15},"mobile":{"show":true},"react":{"opacity":0.7},"log":false});</script></body>
