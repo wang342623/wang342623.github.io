@@ -1,0 +1,424 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+        <title>手写Promise | 轻语 の ブログ</title>
+        <meta name="author" content="轻语">
+        <meta name="description" content="轻语的博客之家">
+        <meta name="keywords" content="轻语 博客 轻语博客 轻语のブログ">
+        <link rel="icon" href="/img/head.jpg">
+        <script src="https://cdn.staticfile.org/vue/3.2.45/vue.global.prod.min.js"></script>
+        <script src="https://cdn.staticfile.org/highlight.js/11.7.0/highlight.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/11.7.0/styles/github.min.css">
+        <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/6.2.1/css/all.min.css">
+        
+        <script src="https://polyfill.io/v3/polyfill.min.js?features="></script>
+        
+        
+        <link rel="stylesheet" href="/css/fonts.min.css">
+        <link rel="stylesheet" href="/css/particlex.css">
+
+
+       
+        
+
+        
+            <!--鼠标点击烟花爆炸效果，需要引入jQuery-->
+            <canvas class="fireworks" style="position: fixed;left: 0;top: 0;z-index: 1; pointer-events: none;" ></canvas> 
+            <script type="text/javascript" src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script> 
+            <script type="text/javascript" src="/js/fireworks.js"></script>
+        
+      
+        
+        
+        
+        <!-- 樱花 -->
+        <script type="text/javascript" src="/js/sakura.js"></script>
+        
+
+    <meta name="generator" content="Hexo 6.3.0"></head>
+
+    <body>
+        <div id="loading" style="height: 100vh; width: 100vw; position: fixed; display: flex; z-index: 2147483647; justify-content: space-between; background: #fff; transition: all 0.3s ease-out; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none">
+    <div style="position: fixed; height: 100vh; width: 100vw; display: flex; justify-content: center; align-items: center">
+        <div id="loadcontent" style="width: 50vmin; height: 50vmin; padding: 50px; border-radius: 50%; display: flex; justify-content: center; align-items: center; border: solid 10px #a3ddfb; text-align: center">
+            <div>
+                <h2>LOADING...</h2>
+                <p style="word-break: keep-all">加载过慢请开启缓存（浏览器默认开启）</p>
+                <div>
+                    <img alt="loading" src="/loading.gif" style="width: 60px">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+        <div id="layout">
+            <transition name="into">
+                <div v-show="showpage" style="display: -not-none">
+                    <div id="menushow">
+                        <nav id="menu">
+    <div class="desktop-menu">
+        <a href="/">
+            <span class="title">轻语 の ブログ</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;home</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;about</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;archives</span>
+        </a>
+        
+    </div>
+    <div :class="'phone-menu ' + menushow" id="phone-menu">
+        <div class="curtain" @click="menushow = !menushow" v-show="menushow"></div>
+        <div class="title" @click="menushow = !menushow">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;轻语 の ブログ</span>
+        </div>
+        <transition name="slide">
+        <div class="items" v-show="menushow">
+            
+            <a href="/">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-house fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">home</div>
+                </div>
+            </a>
+            
+            <a href="/about">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-id-card fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">about</div>
+                </div>
+            </a>
+            
+            <a href="/archives">
+                <div class="item">
+                    <div style="min-width: 20px; max-width: 50px; width: 10%">
+                        <i class="fa-solid fa-box-archive fa-fw"></i>
+                    </div>
+                    <div style="min-width: 100px; max-width: 150%; width: 20%">archives</div>
+                </div>
+            </a>
+            
+        </div>
+        </transition>
+    </div>
+</nav>
+
+                    </div>
+                    <div id="main">
+                        <div class="article">
+    <div>
+        <h1>手写Promise </h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2023/3/1
+        </span>
+        
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <pre><code class="js">
+// promise 有一个参数 是一个函数 PromiseA+ 里他叫 execoutor
+// 这个函数有两个参数 resolve reject
+
+// PromiseA+规范中规定 : promise 有三个状态 pending fulfilled rejected
+// pending (等待状态) 默认初识状态 可以转换为 fulfilled (成功状态) 或者 rejected (失败状态)
+// 当转换为 成功 或者 失败 状态后无法转为其他状态
+// 成功状态 必须有一个不可改变的值 value
+// 失败状态 必须有一个不可改变的原因 reason
+
+// new Promise((resolve,reject)=&gt;&#123;
+//     resolve(value) // 成功 接收一个value 状态转换为 fulfilled 不可再次改变
+//     reject(reason) // 失败 接收一个 reason 状态转换为 reason 不可再次改变
+//     // 当代码抛出异常直接执行 reject
+// &#125;)
+
+// promiseA+ 规定 要有一个 叫做 then的方法 里面有两个参数 onFulfilled,onRejected 成功有成功的值 失败有失败的原因
+// 当状态 state 为 fulfilled 则执行 onFulfilled 传入 this.value 当状态 state为 rejected 则执行 onRejected 传入 this.reason
+// onFulfilled, onRejcted 如果他们是函数 则必须分别在 fulfilled, rejected 之后被调用 value或reason 依次作为他们的第一个参数
+
+//  当按照以上要求实现了 一个Promise 类时  promise 就可以简单的使用一下了
+//  当 resolve 在 setTimeout内执行 then时 state 还是pending状态
+
+//  我们就需要在then调用的时候，将成功和失败存到各自的数组，一旦reject或者resolve，就调用它们
+//  类似于发布订阅，先将then里面的两个函数储存起来，由于一个promise可以有多个then，所以存在同一个数组内。
+//  成功或者失败时，forEach调用它们
+
+// 下面就需要解决链式调用了
+// promiseA+规定了 then 方法 必须返回一个 promise 并给出了一个示例
+// promise2 = promise1.then(onFulfilled, onRejected);
+// promiseA=规定 第一个then中返回了一个参数 x 判断x的函数叫做 resolvePromise
+// 首先看 x 是不是promise
+// 如果是 promise 则取他的结果作为promise2成功的结果
+// 所以要比较x 和promise2
+// resolvePromise 的参数有 promise2 (默认返回的promise) x 我们自己return的对象 resolve reject
+// resolve 和 reject 是 promise2的
+
+// 处理一些参数问题
+// A+ 规定 onFulfilled,onRejected都是可选参数，如果他们不是函数，必须被忽略
+// onFulfilled返回一个普通的值，成功时直接等于 value =&gt; value
+// onRejected返回一个普通的值，失败时如果直接等于 value =&gt; value，则会跑到下一个then中的onFulfilled中，
+// 所以直接扔出一个错误reason =&gt; throw err
+// A+ 规定onFulfilled或onRejected不能同步被调用，必须异步调用。我们就用setTimeout解决异步问题
+// 如果onFulfilled或onRejected报错，则直接返回reject()
+class MyPromise &#123;
+  constructor(executor) &#123;
+    // 状态 初始化 默认值 pending
+    this.state = &quot;pending&quot;
+    // 成功的值
+    this.value = undefined
+    // 失败的原因
+    this.reason = undefined
+    // 成功存放的数组
+    this.onResolvedCallbacks = []
+    // 失败存放的数组
+    this.onRejectedCallbacks = []
+    // 成功
+    let resolve = (value) =&gt; &#123;
+      // 如果状态不是pending 不执行
+      if (this.state !== &quot;pending&quot;) return
+      // 将状态改变为 fulfilled
+      this.state = &quot;fulfilled&quot;
+      // 成功的值
+      this.value = value
+      // 一旦 resolve 执行 调用成功数组中的函数
+      this.onResolvedCallbacks.forEach((fn) =&gt; fn())
+    &#125;
+    // 失败
+    let reject = (reason) =&gt; &#123;
+      // 如果状态不是pending 不执行
+      if (this.state !== &quot;pending&quot;) return
+      // 将状态改变为 rejected
+      this.state = &quot;rejected&quot;
+      // 失败的原因
+      this.reason = reason
+      // 一旦 reject 执行 调用失败数组的函数
+      this.onRejectedCallbacks.forEach((fn) =&gt; fn())
+    &#125;
+    try &#123;
+      // 立即执行函数
+      executor(resolve, reject)
+    &#125; catch (err) &#123;
+      reject(err)
+    &#125;
+  &#125;
+  // then 方法
+  then(onFulfilled, onRejected) &#123;
+    // onfulfilled 如果不是函数 忽略 onfulfilled 直接返回value
+    onFulfilled =
+      typeof onFulfilled === &quot;function&quot; ? onFulfilled : (value) =&gt; value
+    // onRejected如果不是函数，就忽略onRejected，直接扔出错误
+    onRejected =
+      typeof onRejected === &quot;function&quot;
+        ? onRejected
+        : (err) =&gt; &#123;
+            throw err
+          &#125;
+    // 声明返回的promise2
+    let myPromise2 = new MyPromise((reslove, reject) =&gt; &#123;
+      // 成功执行 onFulfilled
+      if (this.state === &quot;fulfilled&quot;) &#123;
+        // 异步
+        setTimeout(() =&gt; &#123;
+          try &#123;
+            let x = onFulfilled(this.value)
+            resolvePromise(myPromise2, x, reslove, reject)
+          &#125; catch (err) &#123;
+            reject(err)
+          &#125;
+        &#125;)
+      &#125;
+      // 失败执行 onRejecyed
+      if (this.state === &quot;rejected&quot;) &#123;
+        // 异步
+        setTimeout(() =&gt; &#123;
+          try &#123;
+            let x = onRejected(this.reason)
+            resolvePromise(myPromise2, x, reslove, reject)
+          &#125; catch (err) &#123;
+            reject(err)
+          &#125;
+        &#125;)
+      &#125;
+      // 当状态为 pending 时 将方法存入各自的数组中
+      if (this.state === &quot;pending&quot;) &#123;
+        this.onResolvedCallbacks.push(() =&gt; &#123;
+          // 异步
+          setTimeout(() =&gt; &#123;
+            try &#123;
+              let x = onFulfilled(this.value)
+              resolvePromise(myPromise2, x, reslove, reject)
+            &#125; catch (err) &#123;
+              reject(err)
+            &#125;
+          &#125;)
+        &#125;)
+        this.onRejectedCallbacks.push(() =&gt; &#123;
+          // 异步
+          setTimeout(() =&gt; &#123;
+            try &#123;
+              let x = onRejected(this.reason)
+              resolvePromise(myPromise2, x, reslove, reject)
+            &#125; catch (err) &#123;
+              reject(err)
+            &#125;
+          &#125;)
+        &#125;)
+      &#125;
+    &#125;)
+    return myPromise2
+  &#125;
+&#125;
+// proimiseA+规范规定了一段代码 让不同的promise代码相互套用 叫做 resolvePromise
+// let p = new Promise(resolve =&gt; &#123;
+//             resolve(0);
+//         &#125;);
+// var p2 = p.then(data =&gt; &#123;
+//         // 循环引用，自己等待自己完成，一辈子完不成
+//              return p2;
+//         &#125;)
+// 如果 x === promise2 则会造成循环引用 需要自己等待完成 ===&gt; 如果x待处理pending，则promise必须保持待处理状态，直到xfulfilled或rejected为止。
+// 判断 x
+// x 不能是null
+// 如果x是普通对象 直接resolve(x)
+// x是对象或者函数包括(promise) let then = x.then 2、当x是对象或者函数(默认promise)
+// 声明了 then
+// 如果取 then 报错 则走 reject()
+// 如果then 是个函数 则用call执行then 第一个参数是this 后面是成功回调和失败的回调
+// 如果成功的回调 还是promise 就递归解析 3 成功和失败只能调用一个 所以设定一个called来防止多次调用
+
+function resolvePromise(promise2, x, resolve, reject) &#123;
+  // 循环引用报错
+  if (x === promise2) &#123;
+    return reject(new TypeError(&quot;检测到循环引用&quot;))
+  &#125;
+  // 防止多次调用
+  let called
+  // 如果 x 不是null 并且是函数或者对象
+  if (x !== null &amp;&amp; (typeof x === &quot;object&quot; || typeof x === &quot;function&quot;)) &#123;
+    try &#123;
+      // A+规定 声明then = x.then方法
+      let then = x.then
+      // 如果 then 是函数 就默认是 promise
+      if (typeof then === &quot;function&quot;) &#123;
+        // 就让then执行 第一个参数是this   后面是成功的回调 和 失败的回调
+        then.call(
+          (x, y) =&gt; &#123;
+            // 成功和失败只能调用一个
+            if (called) return
+            called = true
+            // resolve的结果依旧是promise那就继续解析
+            resolvePromise(promise2, y, resolve, reject)
+          &#125;,
+          (err) =&gt; &#123;
+            //成功和失败只能调用一个
+            if (called) return
+            called = true
+            // 失败了就直接返回
+            reject(err)
+          &#125;
+        )
+      &#125; else &#123;
+        /// 直接成功
+        resolve(x)
+      &#125;
+    &#125; catch (err) &#123;
+      //也属于失败
+      if (called) return
+      called = true
+      // 取then出错了就不继续了
+      reject(err)
+    &#125;
+  &#125; else &#123;
+    resolve(x)
+  &#125;
+&#125;
+
+const p = new MyPromise((reslove, reject) =&gt; &#123;
+  setTimeout(() =&gt; &#123;
+    reslove(123)
+  &#125;, 100)
+&#125;)
+  .then((res) =&gt; &#123;
+    console.log(res)
+    return 444
+  &#125;)
+  .then((res) =&gt; &#123;
+    console.log(res)
+  &#125;)
+
+// const p1 = new Promise((reslove,reject)=&gt;&#123;
+//         reslove(444);
+// &#125;)
+// p1.then(value =&gt;&#123;
+//     console.log(value);
+// &#125;)
+// p1.then(value=&gt;&#123;
+//     console.log(value);
+// &#125;)
+</code></pre>
+
+    </div>
+    
+    
+    
+    
+    
+</div>
+
+                        <footer id="footer">
+    <div class="footer-wrap">
+        <div>
+            © 2022 - 2023 轻语 の ブログ
+            <span class="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            @轻语
+        </div>
+        <div></div>
+        <div>Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> & <a target="_blank" rel="noopener" href="https://github.com/argvchs/hexo-theme-particlex">ParticleX Theme</a></div>
+        
+    </div>
+</footer>
+
+                    </div>
+                </div>
+            </transition>
+            <div id="showimg">
+                <img id="showimg-content" alt="showimg">
+            </div>
+        </div>
+        <script src="/js/functions.js"></script>
+<script src="/js/particlex.js"></script>
+
+    
+    
+    
+    
+
+
+    <script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/assets/z16.model.json"},"display":{"position":"left","width":150,"height":300,"hOffset":40,"vOffset":-15},"mobile":{"show":true},"react":{"opacity":0.7},"log":false});</script></body>
+</html>
